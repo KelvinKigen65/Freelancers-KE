@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api"; // central Axios instance
 
 const Login = () => {
   const { login } = useAuth();
@@ -14,15 +14,20 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", formData);
+      const res = await api.post("/api/auth/login", formData);
       const { token, user } = res.data;
 
-      // Store token for session persistence
       localStorage.setItem("token", token);
-
-      // Update auth context
       login(user);
-      navigate("/dashboard");
+
+      // Redirect based on user role
+      if (user.role === "freelancer") {
+        navigate("/dashboard/freelancer");
+      } else if (user.role === "client") {
+        navigate("/dashboard/client");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (err) {
       console.error("Login error:", err.response?.data?.message || err.message);
       alert("Login failed. Please check your credentials.");

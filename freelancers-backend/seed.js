@@ -1,26 +1,25 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 const User = require("./models/User");
-const bcrypt = require("bcrypt");
 
 mongoose.connect(process.env.MONGO_URI).then(async () => {
-  const password = await bcrypt.hash("password123", 10);
-
-  await User.create([
+  const users = [
     {
       fullName: "Test Freelancer",
       email: "freelancer@test.com",
-      password,
+      password: "password123",
       role: "freelancer",
     },
     {
       fullName: "Test Client",
       email: "client@test.com",
-      password,
+      password: "password123",
       role: "client",
     },
-  ]);
+  ];
 
-  console.log("✅ Test users created");
+  await User.deleteMany({});
+  await User.insertMany(users);
+  console.log("✅ Test users seeded");
   mongoose.disconnect();
 });
