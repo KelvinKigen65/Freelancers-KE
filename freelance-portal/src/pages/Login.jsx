@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import api from "../api"; // central Axios instance
+import api from "../api"; // uses REACT_APP_BACKEND_URL from .env
 
 const Login = () => {
   const { login } = useAuth();
@@ -20,7 +20,7 @@ const Login = () => {
       localStorage.setItem("token", token);
       login(user);
 
-      // Redirect based on user role
+      // Redirect based on role
       if (user.role === "freelancer") {
         navigate("/dashboard/freelancer");
       } else if (user.role === "client") {

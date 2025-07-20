@@ -1,37 +1,42 @@
-import { Link } from "react-router-dom";
+import React from "react";
 
 const Navbar = ({ userRole }) => {
   return (
-    <nav className="bg-gray-900 text-white px-6 py-4 flex justify-between items-center">
-      <div className="text-xl font-bold">FreelancersKE</div>
-      <ul className="flex space-x-6">
-        <li><Link to="/" className="hover:text-blue-400">Home</Link></li>
+    <nav className="bg-white shadow-md px-8 py-4 flex justify-between items-center">
+      <a href="/" className="text-xl font-bold text-green-600">FreelancersKE</a>
 
-        {/* Role-based links */}
-        {!userRole && (
-          <>
-            <li><Link to="/login" className="hover:text-blue-400">Login</Link></li>
-            <li><Link to="/signup" className="hover:text-blue-400">Sign Up</Link></li>
-          </>
-        )}
+      <ul className="flex gap-6 text-gray-700 font-medium">
+        <li>
+          <a href="/" className="hover:text-green-600 transition">Home</a>
+        </li>
 
+        {/* Freelancer-specific links */}
         {userRole === "freelancer" && (
           <>
-            <li><Link to="/dashboard" className="hover:text-blue-400">Dashboard</Link></li>
-            <li><Link to="/projects" className="hover:text-blue-400">Browse Projects</Link></li>
+            <li>
+              <a href="/projects" className="hover:text-green-600 transition">Browse Projects</a>
+            </li>
+            <li>
+              <a href="/my-projects" className="hover:text-green-600 transition">My Projects</a>
+            </li>
           </>
         )}
 
+        {/* Client-specific links */}
         {userRole === "client" && (
           <>
-            <li><Link to="/post-project" className="hover:text-blue-400">Post a Project</Link></li>
-            <li><Link to="/my-projects" className="hover:text-blue-400">My Projects</Link></li>
+            <li>
+              <a href="/post-project" className="hover:text-green-600 transition">Post Project</a>
+            </li>
+            <li>
+              <a href="/my-projects" className="hover:text-green-600 transition">My Projects</a>
+            </li>
           </>
         )}
 
-        {userRole && (
-          <li><Link to="/logout" className="hover:text-red-400">Logout</Link></li>
-        )}
+        <li>
+          <a href="/login" className="hover:text-green-600 transition">Logout</a>
+        </li>
       </ul>
     </nav>
   );

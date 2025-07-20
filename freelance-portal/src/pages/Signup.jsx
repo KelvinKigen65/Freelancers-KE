@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import api from "../api"; // use centralized Axios instance
+import api from "../api"; // Axios with REACT_APP_BACKEND_URL
 
 const Signup = () => {
   const { login } = useAuth();
@@ -21,12 +21,19 @@ const Signup = () => {
     e.preventDefault();
     try {
       const res = await api.post("/api/auth/signup", formData);
-
       const { token, user } = res.data;
 
       localStorage.setItem("token", token);
       login(user);
-      navigate("/dashboard");
+
+      // Redirect based on role
+      if (user.role === "freelancer") {
+        navigate("/dashboard/freelancer");
+      } else if (user.role === "client") {
+        navigate("/dashboard/client");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (err) {
       console.error("Signup failed:", err.response?.data?.message || err.message);
       alert("Signup failed. Please try again.");
