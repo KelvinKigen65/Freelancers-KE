@@ -9,12 +9,14 @@ const projectRoutes = require("./routes/projectRoutes");
 const app = express();
 
 // 🔐 Fix: Explicit CORS for React frontend
+
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "http://localhost:3000", // match frontend port
     credentials: true,
   })
 );
+
 
 // Parse incoming JSON
 app.use(express.json());

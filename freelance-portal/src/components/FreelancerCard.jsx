@@ -3,7 +3,7 @@ import React from "react";
 const FreelancerCard = ({ name, title, rate, image }) => {
   return (
     <div className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
-      <img src={image} alt={name} className="w-full h-40 object-cover" />
+      <img src="imgA3.jpg" alt={name} className="w-full h-40 object-cover" />
       <div className="p-4">
         <h3 className="text-lg font-bold text-gray-800">{name}</h3>
         <p className="text-sm text-gray-600">{title}</p>
