@@ -10,16 +10,22 @@ router.post("/signup", async (req, res) => {
   const { fullName, email, password, role } = req.body;
 
   try {
-    // Check if email already exists
     const existingUser = await User.findOne({ email });
     if (existingUser)
       return res.status(409).json({ message: "Email already in use." });
 
-    // Create and save new user
-    const newUser = new User({ fullName, email, password, role });
+    // 👉 Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({
+      fullName,
+      email,
+      password: hashedPassword,
+      role,
+    });
+
     await newUser.save();
 
-    // Generate token
     const token = jwt.sign(
       { id: newUser._id, email: newUser.email, role: newUser.role },
       process.env.JWT_SECRET,
@@ -35,6 +41,7 @@ router.post("/signup", async (req, res) => {
     res.status(500).json({ message: "Error registering user." });
   }
 });
+
 
 // 🔑 Login
 router.post("/login", async (req, res) => {

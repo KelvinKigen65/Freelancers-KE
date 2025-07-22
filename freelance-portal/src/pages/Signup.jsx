@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import api from "../api"; // Axios with REACT_APP_BACKEND_URL
+import api from "../api";
 
 const Signup = () => {
   const { login } = useAuth();
@@ -13,20 +13,24 @@ const Signup = () => {
     password: "",
     role: "freelancer",
   });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
+
     try {
-      const res = await api.post("/api/auth/signup", formData);
+      const res = await api.post("/auth/signup", formData); // ✅ CORRECTED endpoint
       const { token, user } = res.data;
 
       localStorage.setItem("token", token);
       login(user);
 
-      // Redirect based on role
       if (user.role === "freelancer") {
         navigate("/dashboard/freelancer");
       } else if (user.role === "client") {
@@ -36,15 +40,22 @@ const Signup = () => {
       }
     } catch (err) {
       console.error("Signup failed:", err.response?.data?.message || err.message);
-      alert("Signup failed. Please try again.");
+      setError(err.response?.data?.message || "Signup failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="max-w-md w-full bg-white shadow-md rounded px-8 py-6">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Create Account</h2>
+        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
+          Create Account
+        </h2>
         <form onSubmit={handleSubmit}>
+          {error && (
+            <p className="mb-4 text-red-600 text-sm text-center">{error}</p>
+          )}
           <div className="mb-4">
             <label className="block text-gray-700">Full Name</label>
             <input
@@ -96,9 +107,14 @@ const Signup = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
+            disabled={loading}
+            className={`w-full py-2 rounded ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-700"
+            } text-white`}
           >
-            Sign Up
+            {loading ? "Creating Account..." : "Sign Up"}
           </button>
         </form>
         <p className="text-center mt-4 text-sm text-gray-600">
