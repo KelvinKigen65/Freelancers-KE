@@ -11,7 +11,7 @@ const app = express();
 // 🌐 CORS: Allow React frontend & preflight requests
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "https://freelancerske.netlify.app/api", // Use .env value if available
+    origin: process.env.CLIENT_URL || "https://freelancerske.netlify.app", // Use .env value if available
     credentials: true,
   })
 );
