@@ -11,7 +11,8 @@ const app = express();
 // === CORS CONFIG ===
 const allowedOrigins = [
   "http://localhost:3000",
-  process.env.CLIENT_URL || "https://freelance-portal-h1et.onrender.com"
+  "https://freelance-portal-uwh3.onrender.com",
+  process.env.CLIENT_URL || "https://freelance-portal-uwh3.onrender.com"
 ];
 
 app.use(cors({
